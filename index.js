@@ -5,7 +5,10 @@ const series = require('run-series')
 series([
   './no-mod-req.js',
   './mod-req.js',
-  './mod-req-sometimes.js'
+  './mod-req-sometimes.js',
+  './mod-req-proto.js',
+  './req-proto-obj.js',
+  './mod-req-proto-obj.js'
 ].map((file) => {
   return function (done) {
     var c = spawn('node', [file], {stdio: 'inherit'})
