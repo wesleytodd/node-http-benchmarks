@@ -4,9 +4,10 @@ const assert = require('assert')
 const benchmark = require('benchmark')
 const runnable = require('runnable')
 
-module.exports = function (name, handler) {
+module.exports = function (name, handler, opts) {
   var port
-  var server = http.createServer(handler)
+  debugger;
+  var server = http.createServer(opts || handler, opts && handler)
 
   const suite = new benchmark.Suite()
 

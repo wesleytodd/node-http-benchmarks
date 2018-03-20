@@ -3,12 +3,9 @@ const benchmark = require('./bench')
 const runnable = require('runnable')
 
 module.exports = runnable(function () {
-  benchmark('Dont modify req', (req, res) => {
-    var now = Date.now()
-    if (now % 3 === 0)  {
-        // do nothing
-    }
+  benchmark('Modify req', (req, res) => {
+    req.now = Date.now()
     res.statusCode = 200
-    res.end('Hello World')
+    res.end(`Hello ${req.url} at ${req.now}`)
   })
 }, [], module)

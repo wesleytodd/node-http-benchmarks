@@ -3,15 +3,14 @@ const spawn = require('child_process').spawn
 const series = require('run-series')
 
 series([
-  './no-mod-req.js',
-  './mod-req.js',
-  './mod-req-sometimes.js',
-  './mod-req-proto.js',
-  './req-proto-obj.js',
-  './mod-req-proto-obj.js'
+  './cases/baseline.js',
+  './cases/express.js',
+  './cases/restify.js',
+  './cases/wrap.js'
+  // './cases/new-proto.js'
 ].map((file) => {
   return function (done) {
-    var c = spawn('node', [file], {stdio: 'inherit'})
+    var c = spawn('node', ['--inspect', '--inspect-brk', file], {stdio: 'inherit'})
     c.on('close', () => {
       done()
     })
