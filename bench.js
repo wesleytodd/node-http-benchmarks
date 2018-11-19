@@ -1,10 +1,10 @@
 'use strict'
 const http = require('http')
 const assert = require('assert')
-const perfnow = require('@streammedev/perfnow')
 const series = require('run-series')
 const parallel = require('run-parallel')
 const onFinished = require('on-finished')
+const convertHrTime = require('convert-hrtime')
 const major = parseInt(process.version.split('.')[0].replace('v', ''), 10)
 
 module.exports = function (opts) {
@@ -12,14 +12,14 @@ module.exports = function (opts) {
   const handler = opts.handler
   const results = []
   const runs = []
-  let port
   let server
+  let port
 
   if (major < 9) {
     server = http.createServer((req, res) => {
-      const start = perfnow()
+      const start = process.hrtime()
       onFinished(res, () => {
-        results.push(perfnow() - start)
+        results.push(convertHrTime(process.hrtime(start)).milliseconds)
       })
 
       handler(req, res)
@@ -29,9 +29,9 @@ module.exports = function (opts) {
       IncomingMessage: opts.IncomingMessage,
       ServerResponse: opts.ServerResponse
     }, (req, res) => {
-      const start = perfnow()
+      const start = process.hrtime()
       onFinished(res, () => {
-        results.push(perfnow() - start)
+        results.push(convertHrTime(process.hrtime(start)).milliseconds)
       })
 
       handler(req, res)
@@ -62,8 +62,10 @@ module.exports = function (opts) {
       if (err) {
         return console.log(err)
       }
-      const mean = results.reduce((p, v) => p + v) / results.length
-      console.log(`${name}: ${mean.toFixed(5)}ms`)
+      const mean = (results.reduce((p, v) => p + v) / results.length).toFixed(5)
+      const max = (results.reduce((p, v) => p > v ? p : v)).toFixed(5)
+      const min = (results.reduce((p, v) => p < v ? p : v)).toFixed(5)
+      console.log(`${name}: ${mean}ms (min: ${min}ms max: ${max}ms)`)
     })
   })
 }

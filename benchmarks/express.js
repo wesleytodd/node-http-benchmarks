@@ -1,19 +1,19 @@
 'use strict'
-const http = require('http')
+const express = require('express')
 const benchmark = require('../bench')
 const runnable = require('runnable')
 
 module.exports = runnable(function () {
-  var proto = Object.create(http.IncomingMessage.prototype)
-  proto.now = null
+  const app = express()
+  app.get('/', (req, res) => {
+    req.now = Date.now()
+    res.status(200).end(`Hello ${req.url} at ${req.now}`)
+  })
 
   benchmark({
-    name: '(Express) Replace prototype',
+    name: '(Express) Express app',
     handler: (req, res) => {
-      Object.setPrototypeOf(req, proto)
-      req.now = Date.now()
-      res.statusCode = 200
-      res.end(`Hello ${req.url} at ${req.now}`)
+      app.handle(req, res)
     }
   })
 }, [], module)

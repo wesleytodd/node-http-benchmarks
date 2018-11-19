@@ -1,17 +1,21 @@
 'use strict'
-const http = require('http')
+const restify = require('restify')
 const benchmark = require('../bench')
 const runnable = require('runnable')
 
 module.exports = runnable(function () {
-  http.IncomingMessage.prototype.now = null
+  const server = restify.createServer()
+  server.get('/', (req, res, next) => {
+    req.now = Date.now()
+    res.sendRaw(200, `Hello ${req.url} at ${req.now}`)
+    next()
+  })
 
   benchmark({
-    name: '(Restify) Modify prototype at startup',
+    name: '(Restify) Restify app',
+    server: server,
     handler: (req, res) => {
-      req.now = Date.now()
-      res.statusCode = 200
-      res.end(`Hello ${req.url} at ${req.now}`)
+      server._onRequest(req, res)
     }
   })
 }, [], module)
