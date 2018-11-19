@@ -7,7 +7,7 @@ module.exports = runnable(function () {
   http.IncomingMessage.prototype.now = null
 
   benchmark({
-    name: 'Modify prototype at startup',
+    name: '(Restify) Modify prototype at startup',
     handler: (req, res) => {
       req.now = Date.now()
       res.statusCode = 200

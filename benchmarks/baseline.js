@@ -1,6 +1,5 @@
 'use strict'
 const benchmark = require('../bench')
-const http = require('http')
 const runnable = require('runnable')
 
 module.exports = runnable(function () {
@@ -9,7 +8,7 @@ module.exports = runnable(function () {
     handler: (req, res) => {
       const now = Date.now()
       res.statusCode = 200
-      res.end(`Hello ${req.url} at ${req.now}`)
+      res.end(`Hello ${req.url} at ${req.now || now}`)
     }
   })
 }, [], module)

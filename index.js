@@ -9,15 +9,13 @@ series([
   './benchmarks/restify.js',
   './benchmarks/wrap.js',
   './benchmarks/new-proto.js',
-  './benchmarks/modify-some.js',
+  './benchmarks/modify-some.js'
 ].map((file) => {
   return function (done) {
-    var c = spawn('node', [file], {stdio: 'inherit'})
-    c.on('close', (code) => {
-      assert.equal(code, 0)
-      setTimeout(() => {
-        done()
-      }, 5000)
-    })
+    spawn('node', [file], { stdio: 'inherit' })
+      .on('close', (code) => {
+        assert.strictEqual(code, 0)
+        setTimeout(() => done(), 5000)
+      })
   }
 }))

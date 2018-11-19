@@ -1,6 +1,5 @@
 'use strict'
 const benchmark = require('../bench')
-const http = require('http')
 const runnable = require('runnable')
 
 module.exports = runnable(function () {

@@ -5,10 +5,9 @@ const perfnow = require('@streammedev/perfnow')
 const series = require('run-series')
 const parallel = require('run-parallel')
 const onFinished = require('on-finished')
-const runnable = require('runnable')
 
 module.exports = function (opts) {
-  const {name, handler} = opts 
+  const { name, handler } = opts
   const results = []
   const runs = []
   let port
@@ -32,7 +31,7 @@ module.exports = function (opts) {
         reqs.push((cb) => {
           http.get(`http://127.0.0.1:${port}`, (res) => {
             assert(res)
-            assert.equal(res.statusCode, 200)
+            assert.strictEqual(res.statusCode, 200)
             cb()
           })
         })
@@ -41,7 +40,7 @@ module.exports = function (opts) {
       parallel(reqs, done)
     })
   }
-  
+
   server.listen(0, '127.0.0.1', () => {
     port = server.address().port
     series(runs, (err) => {

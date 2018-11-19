@@ -2,7 +2,7 @@
 const http = require('http')
 const benchmark = require('../bench')
 const runnable = require('runnable')
-const {inherits} = require('util')
+const { inherits } = require('util')
 
 module.exports = runnable(function () {
   function Req (socket) {

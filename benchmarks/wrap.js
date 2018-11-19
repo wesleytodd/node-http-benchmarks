@@ -21,7 +21,7 @@ module.exports = runnable(function () {
   })
 
   benchmark({
-    name: 'Wrap req',
+    name: 'Wrap whole request',
     handler: (req, res) => {
       var r = new Req(req)
       r.now = Date.now()
