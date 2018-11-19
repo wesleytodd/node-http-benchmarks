@@ -10,8 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@streammedev/perfnow": "^2.1.0",
     "benchmark": "^2.1.4",
-    "run-series": "^1.1.4",
+    "on-finished": "^2.3.0",
+    "run-parallel": "^1.1.9",
+    "run-series": "^1.1.8",
     "runnable": "^3.0.0"
   }
 }
