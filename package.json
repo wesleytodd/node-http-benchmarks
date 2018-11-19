@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "standard && npm start"
+    "start": "npm run node4 && npm run node6 && npm run node9 && npm run node11",
+    "test": "standard && node --version && node index.js",
+		"node4": "docker run -it --rm -v $(PWD):/usr/src/app -w /usr/src/app node:4 npm t",
+		"node6": "docker run -it --rm -v $(PWD):/usr/src/app -w /usr/src/app node:6 npm t",
+		"node9": "docker run -it --rm -v $(PWD):/usr/src/app -w /usr/src/app node:9 npm t",
+		"node11": "docker run -it --rm -v $(PWD):/usr/src/app -w /usr/src/app node:11 npm t"
   },
   "author": "",
   "license": "ISC",

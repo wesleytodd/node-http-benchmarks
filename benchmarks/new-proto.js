@@ -2,9 +2,14 @@
 const http = require('http')
 const benchmark = require('../bench')
 const runnable = require('runnable')
-const { inherits } = require('util')
+const inherits = require('util').inherits
+const major = parseInt(process.version.split('.')[0].replace('v', ''), 10)
 
 module.exports = runnable(function () {
+  if (major < 9) {
+    return
+  }
+
   function Req (socket) {
     http.IncomingMessage.call(this, socket)
     this.now = null

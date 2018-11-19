@@ -5,24 +5,38 @@ const perfnow = require('@streammedev/perfnow')
 const series = require('run-series')
 const parallel = require('run-parallel')
 const onFinished = require('on-finished')
+const major = parseInt(process.version.split('.')[0].replace('v', ''), 10)
 
 module.exports = function (opts) {
-  const { name, handler } = opts
+  const name = opts.name
+  const handler = opts.handler
   const results = []
   const runs = []
   let port
+  let server
 
-  const server = http.Server({
-    IncomingMessage: opts.IncomingMessage,
-    ServerResponse: opts.ServerResponse
-  }, (req, res) => {
-    const start = perfnow()
-    onFinished(res, () => {
-      results.push(perfnow() - start)
+  if (major < 9) {
+    server = http.createServer((req, res) => {
+      const start = perfnow()
+      onFinished(res, () => {
+        results.push(perfnow() - start)
+      })
+
+      handler(req, res)
     })
+  } else {
+    server = http.createServer({
+      IncomingMessage: opts.IncomingMessage,
+      ServerResponse: opts.ServerResponse
+    }, (req, res) => {
+      const start = perfnow()
+      onFinished(res, () => {
+        results.push(perfnow() - start)
+      })
 
-    handler(req, res)
-  })
+      handler(req, res)
+    })
+  }
 
   for (let i = 0; i < 1000; i++) {
     runs.push((done) => {
